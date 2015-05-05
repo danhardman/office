@@ -1,38 +1,55 @@
 package app
 
 import (
-	"io/ioutil"
-	"strconv"
-	"strings"
+	"fmt"
+	"math"
+	"math/rand"
+	"time"
 )
 
 const (
-	BaseDir = "/device/directory/"
+	wiggle = 1.5
 )
 
-type Thermometer struct {
-	device      string
-	temperature float64
-}
-
+// Start starts the application
 func Start() {
+	for true {
+		ct := GetCurrentTemperature()
+		dt := GetDesiredTemperature()
 
+		if math.Abs(ct-dt) > wiggle {
+			if ct > dt {
+				DecreaseTemperature()
+			} else if ct < dt {
+				IncreaseTemperature()
+			}
+		}
+		time.Sleep(10 * time.Second)
+	}
 }
 
-func GetTemperature(d string) *Thermometer {
-	data, err := ioutil.ReadFile(BaseDir + d + "/w1_slave")
+// GetCurrentTemperature gets the current temperature from the temperature sensor
+func GetCurrentTemperature() float64 {
+	ct := rand.Float64() * 10
+	fmt.Println(ct)
+	return ct
+}
 
-	if err != nil {
-		panic(err)
-	}
+// GetDesiredTemperature gets the desired temperature set by the controller
+func GetDesiredTemperature() float64 {
+	dt := rand.Float64() * 10
+	fmt.Println(dt)
+	return dt
+}
 
-	ts := strings.Split(string(data), "\n")
-	i, err := strconv.Atoi(ts[1][len(ts[1])-5 : len(ts[1])])
+// DecreaseTemperature decreases the temperature by decreasing heating and
+// increasing cooling
+func DecreaseTemperature() {
+	fmt.Println("Decreasing temp")
+}
 
-	therm := &Thermometer{
-		device:      d,
-		temperature: float64(i) / 1000,
-	}
-
-	return therm
+// IncreaseTemperature increases the temperature by increasing the heating and
+// decreasing cooling
+func IncreaseTemperature() {
+	fmt.Println("Increasing temp")
 }
