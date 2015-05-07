@@ -2,14 +2,21 @@ package app
 
 import (
 	"fmt"
-	"math"
-	"math/rand"
 	"time"
 )
 
 const (
-	wiggle = 1.5
+	baseDir = "/sys/devices/"
+	flux    = 0.6
 )
+
+type Thermometer struct {
+	file string
+}
+
+var heating = false
+var currentTemp = 15.0
+var desiredTemp = 20.0
 
 // Start starts the application
 func Start() {
@@ -17,29 +24,40 @@ func Start() {
 		ct := GetCurrentTemperature()
 		dt := GetDesiredTemperature()
 
-		if math.Abs(ct-dt) > wiggle {
-			if ct > dt {
+		if heating {
+			if (ct - flux) >= dt {
 				DecreaseTemperature()
-			} else if ct < dt {
+				heating = false
+			}
+		} else {
+			if (ct + flux) <= dt {
 				IncreaseTemperature()
+				heating = true
 			}
 		}
-		time.Sleep(10 * time.Second)
+		time.Sleep(100 * time.Millisecond)
 	}
+}
+
+func NewThermometer() *Thermometer {
+	return &Thermometer{}
 }
 
 // GetCurrentTemperature gets the current temperature from the temperature sensor
 func GetCurrentTemperature() float64 {
-	ct := rand.Float64() * 10
-	fmt.Println(ct)
-	return ct
+	if heating {
+		currentTemp = currentTemp + 0.1
+	} else {
+		currentTemp = currentTemp - 0.1
+	}
+	fmt.Println(currentTemp)
+	return currentTemp
 }
 
 // GetDesiredTemperature gets the desired temperature set by the controller
 func GetDesiredTemperature() float64 {
-	dt := rand.Float64() * 10
-	fmt.Println(dt)
-	return dt
+	fmt.Println(desiredTemp)
+	return desiredTemp
 }
 
 // DecreaseTemperature decreases the temperature by decreasing heating and
