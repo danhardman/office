@@ -2,27 +2,30 @@ package app
 
 import (
 	"fmt"
-	"time"
+
+	"github.com/danhardman/officr/thermometer"
 )
 
 const (
-	baseDir = "/sys/devices/"
-	flux    = 0.6
+	flux = 0.6
 )
 
-type Thermometer struct {
-	file string
-}
-
-var heating = false
-var currentTemp = 15.0
 var desiredTemp = 20.0
 
 // Start starts the application
 func Start() {
+	t := thermometer.New()
+	t.Discover()
+
+	//TODO: Turn off heating here
+
+	heating := false
+	var ct, dt float64
+
 	for true {
-		ct := GetCurrentTemperature()
-		dt := GetDesiredTemperature()
+		ct = t.Temperature()
+		dt = GetDesiredTemperature()
+		fmt.Printf("c: %v | d: %v\n", ct, dt)
 
 		if heating {
 			if (ct - flux) >= dt {
@@ -35,28 +38,11 @@ func Start() {
 				heating = true
 			}
 		}
-		time.Sleep(100 * time.Millisecond)
 	}
-}
-
-func NewThermometer() *Thermometer {
-	return &Thermometer{}
-}
-
-// GetCurrentTemperature gets the current temperature from the temperature sensor
-func GetCurrentTemperature() float64 {
-	if heating {
-		currentTemp = currentTemp + 0.1
-	} else {
-		currentTemp = currentTemp - 0.1
-	}
-	fmt.Println(currentTemp)
-	return currentTemp
 }
 
 // GetDesiredTemperature gets the desired temperature set by the controller
 func GetDesiredTemperature() float64 {
-	fmt.Println(desiredTemp)
 	return desiredTemp
 }
 
