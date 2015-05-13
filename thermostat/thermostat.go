@@ -1,4 +1,4 @@
-package app
+package thermostat
 
 import (
 	"fmt"
@@ -17,23 +17,24 @@ func Start() {
 	t := thermometer.New()
 	t.Discover()
 
-	//TODO: Turn off heating here
+	c := make(chan *Reading)
+	// TODO: Turn off heating here
 
 	heating := false
-	var ct, dt float64
+	var dt float64
+	go Reader(t.ID, c) // Start reading the current temperature
 
-	for true {
-		ct = t.Temperature()
+	for cr := range c {
 		dt = GetDesiredTemperature()
-		fmt.Printf("c: %v | d: %v\n", ct, dt)
+		fmt.Printf("c: %v | d: %v\n", cr.Temperature, dt)
 
 		if heating {
-			if (ct - flux) >= dt {
+			if (cr.Temperature - flux) >= dt {
 				DecreaseTemperature()
 				heating = false
 			}
 		} else {
-			if (ct + flux) <= dt {
+			if (cr.Temperature + flux) <= dt {
 				IncreaseTemperature()
 				heating = true
 			}

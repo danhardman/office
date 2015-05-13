@@ -3,15 +3,19 @@ package main
 import (
 	"net/http"
 
-	"github.com/danhardman/officr/app"
-	"github.com/danhardman/officr/web"
+	"github.com/danhardman/officr/server"
+	"github.com/danhardman/officr/thermostat"
 )
 
 func main() {
 	go func() {
-		http.HandleFunc("/", web.Home)
+		http.HandleFunc("/", server.Home)
 		http.ListenAndServe(":8080", nil)
 	}()
 
-	app.Start()
+	go func() {
+		thermostat.Start()
+	}()
+
+	select {}
 }

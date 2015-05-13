@@ -3,8 +3,6 @@ package thermometer
 import (
 	"io/ioutil"
 	"regexp"
-	"strconv"
-	"strings"
 )
 
 const (
@@ -13,7 +11,8 @@ const (
 
 // Thermometer holds thermometer sensor information
 type Thermometer struct {
-	ID string
+	ID          string
+	Temperature float64
 }
 
 // New creates a new Thermometer struct
@@ -41,24 +40,6 @@ func (t *Thermometer) Discover() {
 	if !match {
 		panic("No thermometer device found!")
 	}
-}
-
-// Temperature returns the temperature read from the Thermometer sensor
-func (t *Thermometer) Temperature() float64 {
-	o, err := ioutil.ReadFile(baseDir + t.ID + "/w1_slave")
-
-	if err != nil {
-		panic(err)
-	}
-
-	ts := strings.Split(string(o), "\n")
-	ti, err := strconv.Atoi(ts[1][len(ts[1])-5 : len(ts[1])])
-
-	if err != nil {
-		panic(err)
-	}
-
-	return float64(ti / 1000)
 }
 
 func isDeviceName(s string) bool {
