@@ -1,21 +1,19 @@
 package main
 
 import (
-	"net/http"
-
 	"github.com/danhardman/officr/server"
+	"github.com/danhardman/officr/thermometer"
 	"github.com/danhardman/officr/thermostat"
 )
 
 func main() {
-	go func() {
-		http.HandleFunc("/", server.Home)
-		http.ListenAndServe(":8080", nil)
-	}()
+	t := thermometer.New()
+	r := make(chan *thermostat.Reading)
 
-	go func() {
-		thermostat.Start()
-	}()
+	go thermostat.Reader(t.ID, r)
+	go thermostat.Regulate(r)
+
+	go server.Router()
 
 	select {}
 }

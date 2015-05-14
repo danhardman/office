@@ -6,22 +6,24 @@ import (
 )
 
 const (
-	baseDir = "C:/officr/sys/bus/w1/devices/"
+	baseDir = "C:/sys/bus/w1/devices/"
 )
 
 // Thermometer holds thermometer sensor information
 type Thermometer struct {
-	ID          string
-	Temperature float64
+	ID string
 }
 
 // New creates a new Thermometer struct
 func New() *Thermometer {
-	return &Thermometer{}
+	t := &Thermometer{}
+	t.discover()
+
+	return t
 }
 
-// Discover applies the ID of the thermometer sensor in the devices directory
-func (t *Thermometer) Discover() {
+// discover applies the ID of the thermometer sensor in the devices directory
+func (t *Thermometer) discover() {
 	devices, err := ioutil.ReadDir(baseDir)
 
 	if err != nil {

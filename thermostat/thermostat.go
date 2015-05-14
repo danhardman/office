@@ -2,8 +2,6 @@ package thermostat
 
 import (
 	"fmt"
-
-	"github.com/danhardman/officr/thermometer"
 )
 
 const (
@@ -12,19 +10,14 @@ const (
 
 var desiredTemp = 20.0
 
-// Start starts the application
-func Start() {
-	t := thermometer.New()
-	t.Discover()
-
-	c := make(chan *Reading)
+// Regulate monitors the current temperature and regulates the heating
+func Regulate(r <-chan *Reading) {
 	// TODO: Turn off heating here
 
 	heating := false
 	var dt float64
-	go Reader(t.ID, c) // Start reading the current temperature
 
-	for cr := range c {
+	for cr := range r {
 		dt = GetDesiredTemperature()
 		fmt.Printf("c: %v | d: %v\n", cr.Temperature, dt)
 

@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	baseDir = "C:/officr/sys/bus/w1/devices/"
+	baseDir = "C:/sys/bus/w1/devices/"
 )
 
 type Reading struct {
