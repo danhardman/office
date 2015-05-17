@@ -1,0 +1,14 @@
+<html>
+<head>
+  <title>{{.Title}}</title>
+  {{ template "head" }}
+</head>
+<body>
+  <form action="/UpdateTemp" method="post">
+    <input type="text" name="temperature" />
+    <input type="submit" value="submit" />
+  </form>
+
+  {{ template "footer" }}
+</body>
+</html>

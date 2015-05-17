@@ -10,7 +10,8 @@ import (
 // Router provides the http routing for the application
 func Router() {
 	r := mux.NewRouter()
-	r.HandleFunc("/", Home).Methods("GET")
+	r.HandleFunc("/", GetIndex).Methods("GET")
+	r.HandleFunc("/UpdateTemp", UpdateTemp).Methods("POST")
 
 	log.Fatal(http.ListenAndServe(":8080", r))
 }

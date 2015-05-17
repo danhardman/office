@@ -7,9 +7,10 @@ import (
 )
 
 const (
-	baseDir = "C:/sys/bus/w1/devices/"
+	baseDir = "c:/sys/bus/w1/devices/"
 )
 
+// Reading stores the data for the temperature reading
 type Reading struct {
 	TID         string
 	Temperature float64

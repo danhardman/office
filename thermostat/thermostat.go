@@ -2,6 +2,9 @@ package thermostat
 
 import (
 	"fmt"
+	"io/ioutil"
+	"path/filepath"
+	"strconv"
 )
 
 const (
@@ -37,7 +40,25 @@ func Regulate(r <-chan *Reading) {
 
 // GetDesiredTemperature gets the desired temperature set by the controller
 func GetDesiredTemperature() float64 {
-	return desiredTemp
+	f, err := filepath.Abs("../temperature")
+
+	if err != nil {
+		panic(err)
+	}
+
+	dt, err := ioutil.ReadFile(f)
+
+	if err != nil {
+		panic(err)
+	}
+
+	t, err := strconv.ParseFloat(string(dt[:]), 64)
+
+	if err != nil {
+		panic(err)
+	}
+
+	return t
 }
 
 // DecreaseTemperature decreases the temperature by decreasing heating and

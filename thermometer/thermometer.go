@@ -6,7 +6,7 @@ import (
 )
 
 const (
-	baseDir = "C:/sys/bus/w1/devices/"
+	baseDir = "c:/sys/bus/w1/devices/"
 )
 
 // Thermometer holds thermometer sensor information
