@@ -4,11 +4,16 @@
   {{ template "head" }}
 </head>
 <body>
-  <form action="/UpdateTemp" method="post">
-    <input type="text" name="temperature" />
-    <input type="submit" value="submit" />
-  </form>
-
+  <div id="page" class="grid-container">
+    <div class="grid-50 push-25 control">
+      <h1>officr</h1>
+      <p>Enter the desired room temperature in &#176;C.</p>
+      <form action="/UpdateTemp" method="post">
+        <input type="text" name="temperature" placeholder="19" />
+        <input type="submit" value="Update" />
+      </form>
+    </div>
+  </div>
   {{ template "footer" }}
 </body>
 </html>

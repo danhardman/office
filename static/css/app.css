@@ -1,0 +1,39 @@
+@import 'reset.css';
+@import 'grid.css';
+@font-face {
+  font-family: Raleway;
+  src: url("../fonts/Raleway-ExtraLight.ttf");
+  font-weight: lighter;
+}
+body {
+  background-color: #FEFEFE;
+  font-family: Raleway, sans-serif;
+  font-size: 14px;
+  color: #1c1c1c;
+}
+p {
+  font-style: italic;
+}
+h1 {
+  font-size: 5em;
+}
+.control {
+  text-align: center;
+}
+.control input[type="text"],
+.control input[type="submit"] {
+  width: 425px;
+  height: 30px;
+  font-size: 16px;
+  text-align: center;
+  margin: 5px auto;
+  padding: 0 5px;
+  display: block;
+}
+.control input[type="submit"] {
+  cursor: pointer;
+}
+footer {
+  margin-top: 10px;
+  text-align: center;
+}
